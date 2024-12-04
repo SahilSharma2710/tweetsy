@@ -1,6 +1,7 @@
 package com.example.tweetsy.screens
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,14 +32,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tweetsy.R
 import com.example.tweetsy.models.CategoriesList
 import com.example.tweetsy.viewmodels.CategoryViewModel
 
 @Composable
-fun CategoryScreen() {
-    val categoryViewModel:CategoryViewModel= viewModel()
+fun CategoryScreen(onClick:(String)->Unit) {
+    val categoryViewModel:CategoryViewModel= hiltViewModel()
     val categories: State<List<String>> =categoryViewModel.categories.collectAsState()
 
     // Apply padding for system bars (status bar, navigation bar)
@@ -63,7 +65,7 @@ fun CategoryScreen() {
                 verticalArrangement = Arrangement.SpaceAround
             ) {
                 items(categories.value) {
-                    CategoryItem(it)
+                    CategoryItem(it,onClick)
                 }
             }
         }
@@ -72,9 +74,10 @@ fun CategoryScreen() {
 }
 
 @Composable
-fun CategoryItem(category: String) {
+fun CategoryItem(category: String,onClick:(String)->Unit) {
     Box(
         modifier = Modifier
+            .clickable { onClick(category) }
             .padding(10.dp)
             .width(150.dp)
             .height(160.dp)

@@ -20,12 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tweetsy.viewmodels.DetailViewModel
 
 @Composable
 fun DetailScreen() {
-     val detailViewModel:DetailViewModel= viewModel()
+     val detailViewModel:DetailViewModel= hiltViewModel()
      val tweets=detailViewModel.tweets.collectAsState()
 
      Box(

@@ -9,9 +9,9 @@ import javax.inject.Inject
 
 class TweetRepository @Inject constructor(private val tweetsyApi: TweetsyApi) {
 
-    private val _categories= MutableStateFlow<CategoriesList>(CategoriesList(emptyList() ))
+    private val _categories= MutableStateFlow<List<String>>(emptyList() )
 
-    val categories:StateFlow<CategoriesList>
+    val categories:StateFlow<List<String>>
         get() = _categories
 
     private val _tweets= MutableStateFlow<List<TweetListItem>>(emptyList() )
@@ -22,12 +22,12 @@ class TweetRepository @Inject constructor(private val tweetsyApi: TweetsyApi) {
     suspend fun getCategories(){
         val response= tweetsyApi.getCategories()
         if(response.isSuccessful && response.body()!=null){
-           _categories.emit(response.body()!!)
+           _categories.emit(response.body()!!.categories)
         }
     }
 
     suspend fun getTweets(category: String){
-        val response= tweetsyApi.getTweets(category)
+        val response= tweetsyApi.getTweets("\$..tweets[?(@.category==\"$category\")]")
         if(response.isSuccessful && response.body()!=null){
             _tweets.emit(response.body()!!)
         }
